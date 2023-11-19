@@ -22,7 +22,7 @@ export default function NameScreen({ navigation }) {
           title="Next"
           type="primary"
           onPress={() => {
-            navigation.navigate("NextScreen");
+            navigation.navigate("ProfilePicture");
           }}
         />
       </View>
