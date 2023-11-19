@@ -3,7 +3,8 @@ import { SafeAreaView, Text, StyleSheet, View, Platform } from "react-native";
 import CustomButton from "../components/CustomButton";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
-export default function NameScreen({ navigation }) {
+export default function NameScreen({ route, navigation }) {
+  const { name } = route.params;
   const [date, setDate] = useState(new Date());
 
   const onChangeDate = (event, selectedDate) => {
@@ -11,18 +12,27 @@ export default function NameScreen({ navigation }) {
     setDate(currentDate);
   };
 
+  const calculateAge = (birthday) => {
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.title}>What's your date of birth?</Text>
-        <RNDateTimePicker value={date} onChange={onChangeDate}/>
+        <RNDateTimePicker value={date} onChange={onChangeDate} />
       </View>
       <View style={styles.buttonContainer}>
         <CustomButton
           title="Next"
           type="primary"
           onPress={() => {
-            navigation.navigate("ProfilePicture");
+            navigation.navigate("ProfilePicture", {
+              name: name,
+              age: calculateAge(date),
+            });
           }}
         />
       </View>
@@ -35,8 +45,8 @@ export default function NameScreen({ navigation }) {
 const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     padding: 16,
   },
   container: {

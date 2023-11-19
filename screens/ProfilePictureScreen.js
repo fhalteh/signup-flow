@@ -11,7 +11,8 @@ import CustomButton from "../components/CustomButton";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as ImagePicker from "expo-image-picker";
 
-export default function ProfilePictureScreen({ navigation }) {
+export default function ProfilePictureScreen({ route, navigation }) {
+  const { name, age } = route.params;
   const { showActionSheetWithOptions } = useActionSheet();
   const [avatar, setAvatar] = useState(null);
 
@@ -111,7 +112,11 @@ export default function ProfilePictureScreen({ navigation }) {
           title="Next"
           type="primary"
           onPress={() => {
-            navigation.navigate("Location");
+            navigation.navigate("Location", {
+              name: name,
+              age: age,
+              avatar: avatar,
+            });
           }}
         />
       </View>

@@ -9,6 +9,7 @@ import DateOfBirthScreen from "./screens/DateOfBirthScreen";
 import ProfilePictureScreen from "./screens/ProfilePictureScreen";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import LocationScreen from "./screens/LocationScreen";
+import SummaryScreen from "./screens/SummaryScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,11 @@ export default function App() {
           <Stack.Screen
             name="Location"
             component={LocationScreen}
+            options={{ headerTitle: "" }}
+          />
+          <Stack.Screen
+            name="Summary"
+            component={SummaryScreen}
             options={{ headerTitle: "" }}
           />
         </Stack.Navigator>

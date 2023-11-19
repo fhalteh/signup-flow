@@ -10,7 +10,8 @@ import {
 import CustomButton from "../components/CustomButton";
 import * as Location from "expo-location";
 
-export default function LocationScreen({ navigation }) {
+export default function LocationScreen({ route, navigation }) {
+  const { name, age, avatar } = route.params;
   const [city, setCity] = useState(null);
 
   useEffect(() => {
@@ -43,7 +44,12 @@ export default function LocationScreen({ navigation }) {
           title="Next"
           type="primary"
           onPress={() => {
-            navigation.navigate("Location");
+            navigation.navigate("Summary", {
+              name: name,
+              age: age,
+              avatar: avatar,
+              city: city
+            });
           }}
         />
       </View>

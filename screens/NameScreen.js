@@ -21,7 +21,9 @@ export default function NameScreen({ navigation }) {
           title="Next"
           type="primary"
           onPress={() => {
-            navigation.navigate("DateOfBirth");
+            navigation.navigate("DateOfBirth", {
+              name: name,
+            });
           }}
         />
       </View>
