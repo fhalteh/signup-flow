@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -9,9 +9,47 @@ import {
 } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import * as ImagePicker from "expo-image-picker";
 
 export default function ProfilePictureScreen({ navigation }) {
   const { showActionSheetWithOptions } = useActionSheet();
+  const [avatar, setAvatar] = useState(null);
+
+  const launchCameraRequested = async () => {
+    const { status } = await ImagePicker.getCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera permissions to make this work!");
+      ImagePicker.requestCameraPermissionsAsync();
+      return;
+    }
+    try {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 3],
+      });
+      if (!result.cancelled) {
+        setAvatar(result.uri);
+      }
+    } catch (error) {
+      console.log("Error occurred while launching the camera: ", error);
+    }
+  };
+
+  const launchLibraryRequested = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
 
   const onPress = () => {
     const options = ["Camera", "Library", "Cancel"];
@@ -27,18 +65,15 @@ export default function ProfilePictureScreen({ navigation }) {
       (selectedIndex) => {
         switch (selectedIndex) {
           case 0:
-            // Camera
-            console.log("Camera tapped")
+            launchCameraRequested();
             break;
-
           case 1:
-            // Library
-            console.log("Library tapped")
+            launchLibraryRequested();
             break;
 
           case cancelButtonIndex:
-          // Canceled
-          console.log("Cancel tapped")
+            // Canceled
+            console.log("Cancel tapped");
         }
       }
     );
@@ -56,11 +91,19 @@ export default function ProfilePictureScreen({ navigation }) {
           style={styles.avatarContainer}
           onPress={() => onPress()}
         >
-          <Image
-            source={require("../assets/icon_camera.png")}
-            style={styles.icon}
-            resizeMode="contain"
-          />
+          {avatar ? (
+            <Image
+              source={{ uri: avatar }}
+              style={styles.avatar}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              source={require("../assets/icon_camera.png")}
+              style={styles.icon}
+              resizeMode="contain"
+            />
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
