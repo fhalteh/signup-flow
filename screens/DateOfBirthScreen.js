@@ -1,27 +1,28 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, TextInput, StyleSheet, View } from "react-native";
+import { SafeAreaView, Text, StyleSheet, View, Platform } from "react-native";
 import CustomButton from "../components/CustomButton";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function NameScreen({ navigation }) {
-  const [name, setName] = useState("");
+  const [date, setDate] = useState(new Date());
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.title}>What's your name?</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Enter your name here"
-        />
+        <Text style={styles.title}>What's your date of birth?</Text>
+        <RNDateTimePicker value={date} onChange={onChangeDate}/>
       </View>
       <View style={styles.buttonContainer}>
         <CustomButton
           title="Next"
           type="primary"
           onPress={() => {
-            navigation.navigate("DateOfBirth");
+            navigation.navigate("NextScreen");
           }}
         />
       </View>
@@ -29,8 +30,13 @@ export default function NameScreen({ navigation }) {
   );
 }
 
+// ...
+
 const styles = StyleSheet.create({
   topContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     padding: 16,
   },
   container: {
