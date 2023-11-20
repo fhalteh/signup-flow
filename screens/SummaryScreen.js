@@ -26,10 +26,10 @@ export default function SummaryScreen({ route, navigation }) {
       </View>
       <View style={styles.buttonContainer}>
         <CustomButton
-          title="Next"
+          title="Complete Signup"
           type="primary"
           onPress={() => {
-            navigation.navigate("Location");
+            navigation.navigate("Welcome");
           }}
         />
       </View>
